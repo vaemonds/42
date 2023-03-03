@@ -101,6 +101,24 @@ function timetoword(int $hours, int $minutes): void
         29 => 'Двадцать девять минут'   // 2
     );
 
+    // After 30 minutes
+
+    $arr5 = array(
+        1 => 'часу',
+        2 => 'двух',
+        3 => 'трёх',
+        4 => 'четырёх',
+        5 => 'пяти',
+        6 => 'шести',
+        7 => 'семи',
+        8 => 'восьми',
+        9 => 'девяти',
+        10 => 'десяти',
+        11 => 'одиннадцати',
+        12 => 'двенадцати'
+    );
+
+    // Zero in minutes
     $zero_num_after = '';
     $zero_num_before = '';
     if((int)$minutes == 0) {
@@ -108,8 +126,10 @@ function timetoword(int $hours, int $minutes): void
     } else if((int)$minutes < 10) {
         $zero_num_before = '0';
     }
-    // If null minutes
 
+
+
+    // If null minutes
     if ((int)$minutes == 0) {
         if ((int)$hours == 1) {
             $hours_text = $arr1[0][0];
@@ -120,9 +140,17 @@ function timetoword(int $hours, int $minutes): void
         }
         print_r($hours . ':' . $minutes.$zero_num_after . " - " . $arr2[0][$hours] . " $hours_text" . '.' . PHP_EOL);
     } else if ((int)$minutes < 15 || ((int)$minutes && (int)$minutes < 30)) {
-        $minutes_text = $hours . ':' . $zero_num_before.$minutes . ' ' . $arr4[$minutes] . ' после ' . $arr3[$hours] . '.';
-        print_r($minutes_text . PHP_EOL);
+        $minutes_text = $arr4[$minutes] . ' после ' . $arr3[$hours] . '.';
+        print_r($hours . ':' . $minutes.$zero_num_after . " - " . $minutes_text . PHP_EOL);
+    } else if ((int)$minutes > 30) {
+        if($hours == 12) {
+            $hours_arr_element = 1;
+        } else {
+            $hours_arr_element = (int)$hours + 1;
+        }
+        $minutes_text = $arr4[60 - (int)$minutes];
+        print_r($hours . ':' . $minutes.$zero_num_after . " - " . $minutes_text . ' до ' . $arr5[$hours_arr_element]. '.' . PHP_EOL);
     }
 }
 
-timetoword(7, 19);
+timetoword(11, 20);

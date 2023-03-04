@@ -12,46 +12,25 @@ class TimeToWordConverter implements TimeToWordConvertingInterface
 
     public function __construct() {
         $this->arr1 = array(
-            0 => array(
-                0 => 'час',
-                1 => 'часа',
-                2 => 'часов'
-            ),
-            1 => array(
-                0 => 'минута',
-                1 => 'минуты',
-                2 => 'минут',
-            )
+            0 => 'час',
+            1 => 'часа',
+            2 => 'часов',
+            3 => 'Четверть',
+            4 => 'Половина'
         );
         $this->arr2 = array(
-            0 => array(
-                1 => 'Один',         // 1
-                2 => 'Два',          // 2
-                3 => 'Три',          // 2
-                4 => 'Четыре',       // 2
-                5 => 'Пять',         // 3
-                6 => 'Шесть',        // 3
-                7 => 'Семь',         // 3
-                8 => 'Восемь',       // 3
-                9 => 'Девять',       // 3
-                10 => 'Десять',      // 3
-                11 => 'Одиннадцать', // 3
-                12 => 'Двенадцать'   // 3
-            ),
-            1 => array(
-                1 => 'Один',         // 1
-                2 => 'Два',          // 2
-                3 => 'Три',          // 2
-                4 => 'Четыре',       // 2
-                5 => 'Пять',         // 3
-                6 => 'Шесть',        // 3
-                7 => 'Семь',         // 3
-                8 => 'Восемь',       // 3
-                9 => 'Девять',       // 3
-                10 => 'Десять',      // 3
-                11 => 'Одиннадцать', // 3
-                12 => 'Двенадцать'   // 3
-            )
+            1 => 'Один',         // 1
+            2 => 'Два',          // 2
+            3 => 'Три',          // 2
+            4 => 'Четыре',       // 2
+            5 => 'Пять',         // 3
+            6 => 'Шесть',        // 3
+            7 => 'Семь',         // 3
+            8 => 'Восемь',       // 3
+            9 => 'Девять',       // 3
+            10 => 'Десять',      // 3
+            11 => 'Одиннадцать', // 3
+            12 => 'Двенадцать'   // 3
         );
         $this->arr3 = array(
             1 => 'часа',
@@ -133,13 +112,13 @@ class TimeToWordConverter implements TimeToWordConvertingInterface
 
         if ((int)$minutes == 0) { // If null minutes
             if ((int)$hours == 1) {
-                $hours_text = $this->arr1[0][0];
+                $hours_text = $this->arr1[0];
             } elseif ((int)$hours >= 2 && (int)$hours < 5) {
-                $hours_text = $this->arr1[0][1];
+                $hours_text = $this->arr1[1];
             } else {
-                $hours_text = $this->arr1[0][2];
+                $hours_text = $this->arr1[2];
             }
-            $result = $hours . ':' . $zero_num_before.$minutes.$zero_num_after . " - " . $this->arr2[0][$hours] . " $hours_text" . '.' . PHP_EOL;
+            $result = $hours . ':' . $zero_num_before.$minutes.$zero_num_after . " - " . $this->arr2[$hours] . " $hours_text" . '.' . PHP_EOL;
         } else if ((int)$minutes < 15 || ((int)$minutes != 15 && (int)$minutes < 30)) { // If not 15 and less 30
             $minutes_text = $this->arr4[(int)$minutes] . ' после ' . $this->arr3[(int)$hours] . '.';
             $result = $hours . ':' . $zero_num_before.$minutes.$zero_num_after . " - " . $minutes_text . PHP_EOL;
@@ -150,12 +129,13 @@ class TimeToWordConverter implements TimeToWordConvertingInterface
                 $hours_arr_element = (int)$hours + 1;
             $minutes_text = $this->arr4[60 - (int)$minutes];
             $result = $hours . ':' . $minutes.$zero_num_after . " - " . $minutes_text . ' до ' . $this->arr3[$hours_arr_element]. '.' . PHP_EOL;
-        } else if ((int)$minutes == 15 || (int)$minutes == 30) {
+        } else if ((int)$minutes == 15 || (int)$minutes == 30) { // If quarter or half
             if($hours == 12)
                 $hours_arr_element = 1;
             else
                 $hours_arr_element = (int)$hours + 1;
-            $result = $hours . ':' . $minutes . " - " . $this->arr4[$minutes] . " " . $this->arr5[$hours_arr_element] . '.' . PHP_EOL;
+            $minutes_text = ((int)$minutes == 15) ? $this->arr1[3] : $this->arr1[4];
+            $result = $hours . ':' . $minutes . " - " . $minutes_text . " " . $this->arr5[$hours_arr_element] . '.' . PHP_EOL;
         }
         return $result;
     }

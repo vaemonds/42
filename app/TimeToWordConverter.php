@@ -4,11 +4,11 @@ namespace App;
 
 class TimeToWordConverter implements TimeToWordConvertingInterface
 {
-    private $arr1 = array();
-    private $arr2 = array();
-    private $arr3 = array();
-    private $arr4 = array();
-    private $arr5 = array();
+    private array $arr1;
+    private array $arr2;
+    private array $arr3;
+    private array $arr4;
+    private array $arr5;
 
     public function __construct() {
         $this->arr1 = array(
@@ -117,6 +117,12 @@ class TimeToWordConverter implements TimeToWordConvertingInterface
 
     public function convert(int $hours, int $minutes): string
     {
+        $result = 'Некорректные данные' . PHP_EOL;
+        if (($hours > 12 || $hours < 1 || !is_numeric($hours)) || ((int)$minutes > 59 || (int)$minutes < 0 || !is_numeric($minutes))) {
+            print_r($result);
+            die;
+        }
+
         $zero_num_after = '';
         $zero_num_before = '';
         if((int)$minutes == 0) {
@@ -133,24 +139,26 @@ class TimeToWordConverter implements TimeToWordConvertingInterface
             } else {
                 $hours_text = $this->arr1[0][2];
             }
-            print_r($hours . ':' . $zero_num_before.$minutes.$zero_num_after . " - " . $this->arr2[0][$hours] . " $hours_text" . '.' . PHP_EOL);
+            $result = $hours . ':' . $zero_num_before.$minutes.$zero_num_after . " - " . $this->arr2[0][$hours] . " $hours_text" . '.' . PHP_EOL;
         } else if ((int)$minutes < 15 || ((int)$minutes != 15 && (int)$minutes < 30)) { // If not 15 and less 30
             $minutes_text = $this->arr4[(int)$minutes] . ' после ' . $this->arr3[(int)$hours] . '.';
-            print_r($hours . ':' . $zero_num_before.$minutes.$zero_num_after . " - " . $minutes_text . PHP_EOL);
+            $result = $hours . ':' . $zero_num_before.$minutes.$zero_num_after . " - " . $minutes_text . PHP_EOL;
         } else if ((int)$minutes > 30) { // if more than 30
             if($hours == 12)
                 $hours_arr_element = 1;
             else
                 $hours_arr_element = (int)$hours + 1;
             $minutes_text = $this->arr4[60 - (int)$minutes];
-            print_r($hours . ':' . $minutes.$zero_num_after . " - " . $minutes_text . ' до ' . $this->arr3[$hours_arr_element]. '.' . PHP_EOL);
+            $result = $hours . ':' . $minutes.$zero_num_after . " - " . $minutes_text . ' до ' . $this->arr3[$hours_arr_element]. '.' . PHP_EOL;
         } else if ((int)$minutes == 15 || (int)$minutes == 30) {
             if($hours == 12)
                 $hours_arr_element = 1;
             else
                 $hours_arr_element = (int)$hours + 1;
-            print_r($hours . ':' . $minutes . " - " . $this->arr4[$minutes] . " " . $this->arr5[$hours_arr_element] . '.' . PHP_EOL);
+            $result = $hours . ':' . $minutes . " - " . $this->arr4[$minutes] . " " . $this->arr5[$hours_arr_element] . '.' . PHP_EOL;
+        } else {
+            $result = 'Некорректные данны12е';
         }
-        return $hours + $minutes;
+        return $result;
     }
 }

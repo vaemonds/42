@@ -156,8 +156,6 @@ class TimeToWordConverter implements TimeToWordConvertingInterface
             else
                 $hours_arr_element = (int)$hours + 1;
             $result = $hours . ':' . $minutes . " - " . $this->arr4[$minutes] . " " . $this->arr5[$hours_arr_element] . '.' . PHP_EOL;
-        } else {
-            $result = 'Некорректные данны12е';
         }
         return $result;
     }
